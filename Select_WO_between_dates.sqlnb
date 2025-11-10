@@ -1,0 +1,25 @@
+cells:
+  - kind: 2
+    value: |
+      SELECT * FROM MAX75MV.WORKORDER WHERE
+          ISTASK = 0 and
+          SITEID = 'AN-CT' AND
+          STATUS <> 'CAN'  AND
+          CHANGEDATE BETWEEN TO_DATE('2025-11-08', 'YYYY-MM-DD') AND
+                             TO_DATE('2025-11-10', 'YYYY-MM-DD');
+    languageId: oracle-sql
+  - kind: 1
+    value: >
+      ### 🔍 Query Explanation
+
+      This query retrieves all work orders from the `MAX75MV.WORKORDER` table
+      that:
+
+      - Are not tasks (`ISTASK = 0`)
+
+      - Belong to site `'AN-CT'`
+
+      - Have a status other than `'CAN'`
+
+      - Were changed between **2025-11-08** and **2025-11-10**
+    languageId: markdown
