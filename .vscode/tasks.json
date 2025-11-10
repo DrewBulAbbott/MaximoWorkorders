@@ -1,0 +1,21 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Delete VS Code Log Files",
+      "type": "shell",
+      "command": "if (Test-Path \"$env:APPDATA\\Code\\logs\") { Remove-Item \"$env:APPDATA\\Code\\logs\\*\" -Recurse -Force } else { Write-Host 'No VS Code logs folder found.' }",
+      "problemMatcher": [],
+      "group": {
+        "kind": "build",
+        "isDefault": false
+      },
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared"
+      }
+    }
+  ]
+}
