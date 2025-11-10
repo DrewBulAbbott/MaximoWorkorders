@@ -1,106 +1,38 @@
 cells:
-  - kind: 2
-    value: |
-      SELECT * FROM MAX75MV.WORKORDER WHERE
-          ISTASK = 0 and
-          SITEID = 'AN-CT' AND
-          STATUS <> 'CAN'  AND
-          CHANGEDATE BETWEEN TO_DATE('2025-11-08', 'YYYY-MM-DD') AND
-                             TO_DATE('2025-11-10', 'YYYY-MM-DD');
-    languageId: oracle-sql
-  - kind: 2
-    value: "SET SERVEROUTPUT ON;\r
+- kind: 2
+  value: "SELECT * FROM MAX75MV.WORKORDER WHERE\n    ISTASK = 0 and\n    SITEID =\
+    \ 'AN-CT' AND\n    STATUS <> 'CAN'  AND\n    CHANGEDATE BETWEEN TO_DATE('2025-11-08',\
+    \ 'YYYY-MM-DD') AND\n                       TO_DATE('2025-11-10', 'YYYY-MM-DD');"
+  languageId: oracle-sql
+- kind: 2
+  value: "SET SERVEROUTPUT ON;\n\nDECLARE\n    -- Cursor to select relevant work orders\n\
+    \    CURSOR workorder_cur IS\n        SELECT wonum, description, status, changedate\n\
+    \        FROM MAX75MV.WORKORDER\n        WHERE ISTASK = 0\n          AND SITEID\
+    \ = 'AN-CT'\n          AND STATUS <> 'CAN'\n          AND CHANGEDATE BETWEEN TO_DATE('2025-11-08',\
+    \ 'YYYY-MM-DD')\n                              AND TO_DATE('2025-11-10', 'YYYY-MM-DD');\n\
+    \n    -- Record to hold each row fetched by the cursor\n    workorder_rec workorder_cur%ROWTYPE;\n\
+    \n    -- Counter for processed records\n    v_count INTEGER := 0;\n\nBEGIN\n \
+    \   -- Open the cursor and loop through each row\n    FOR workorder_rec IN workorder_cur\
+    \ LOOP\n        v_count := v_count + 1;\n\n        -- Example of conditional logic\n\
+    \        IF workorder_rec.status = 'WAPPR' THEN\n            DBMS_OUTPUT.PUT_LINE('WO\
+    \ ' || workorder_rec.wonum || ' is waiting for approval.');\n        ELSE\n  \
+    \          DBMS_OUTPUT.PUT_LINE('WO ' || workorder_rec.wonum || ' has status:\
+    \ ' || workorder_rec.status);\n        END IF;\n    END LOOP;\n\n    DBMS_OUTPUT.PUT_LINE('Total\
+    \ work orders processed: ' || v_count);\n\nEXCEPTION\n    WHEN OTHERS THEN\n \
+    \       DBMS_OUTPUT.PUT_LINE('An error occurred: ' || SQLERRM);\nEND;"
+  languageId: oracle-sql
+- kind: 1
+  value: '### 🔍 Query Explanation
 
-      \r
+    This query retrieves all work orders from the `MAX75MV.WORKORDER` table that:
 
-      DECLARE\r
+    - Are not tasks (`ISTASK = 0`)
 
-      \    -- Cursor to select relevant work orders\r
+    - Belong to site `''AN-CT''`
 
-      \    CURSOR workorder_cur IS\r
+    - Have a status other than `''CAN''`
 
-      \        SELECT wonum, description, status, changedate\r
+    - Were changed between **2025-11-08** and **2025-11-10**
 
-      \        FROM MAX75MV.WORKORDER\r
-
-      \        WHERE ISTASK = 0\r
-
-      \          AND SITEID = 'AN-CT'\r
-
-      \          AND STATUS <> 'CAN'\r
-
-      \          AND CHANGEDATE BETWEEN TO_DATE('2025-11-08', 'YYYY-MM-DD')\r
-
-      \                              AND TO_DATE('2025-11-10', 'YYYY-MM-DD');\r
-
-      \r
-
-      \    -- Record to hold each row fetched by the cursor\r
-
-      \    workorder_rec workorder_cur%ROWTYPE;\r
-
-      \r
-
-      \    -- Counter for processed records\r
-
-      \    v_count INTEGER := 0;\r
-
-      \r
-
-      BEGIN\r
-
-      \    -- Open the cursor and loop through each row\r
-
-      \    FOR workorder_rec IN workorder_cur LOOP\r
-
-      \        v_count := v_count + 1;\r
-
-      \r
-
-      \        -- Example of conditional logic\r
-
-      \        IF workorder_rec.status = 'WAPPR' THEN\r
-
-      \            DBMS_OUTPUT.PUT_LINE('WO ' || workorder_rec.wonum || ' is
-      waiting for approval.');\r
-
-      \        ELSE\r
-
-      \            DBMS_OUTPUT.PUT_LINE('WO ' || workorder_rec.wonum || ' has
-      status: ' || workorder_rec.status);\r
-
-      \        END IF;\r
-
-      \    END LOOP;\r
-
-      \r
-
-      \    DBMS_OUTPUT.PUT_LINE('Total work orders processed: ' || v_count);\r
-
-      \r
-
-      EXCEPTION\r
-
-      \    WHEN OTHERS THEN\r
-
-      \        DBMS_OUTPUT.PUT_LINE('An error occurred: ' || SQLERRM);\r
-
-      END;\r
-
-      /\r\n"
-    languageId: oracle-sql
-  - kind: 1
-    value: >
-      ### 🔍 Query Explanation
-
-      This query retrieves all work orders from the `MAX75MV.WORKORDER` table
-      that:
-
-      - Are not tasks (`ISTASK = 0`)
-
-      - Belong to site `'AN-CT'`
-
-      - Have a status other than `'CAN'`
-
-      - Were changed between **2025-11-08** and **2025-11-10**
-    languageId: markdown
+    '
+  languageId: markdown
